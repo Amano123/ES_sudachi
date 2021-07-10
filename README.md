@@ -7,6 +7,7 @@
   * [ ] Pythonでwiki-40Bを操作する
   * [ ] ElasticSearchの操作
 * [ ] 特定の語を検索する
+* [ ] 特定の環境下でファイルのownerが書き換わる問題
 
 
 ## 構成
@@ -14,6 +15,7 @@
   * BD
   * 全文検索を用いてアノテーションデータ作成
 * Ubuntu
+  * rootでの操作は気持ち悪いので、ユーザーを追加
   * データの格納・検索
   * Tensorflow datasetsのWiki-40b
 * Kibana
