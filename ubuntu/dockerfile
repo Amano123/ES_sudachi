@@ -1,0 +1,49 @@
+FROM tensorflow/tensorflow:2.4.2
+
+LABEL maintainer="amano123"
+
+ENV USER "amano"
+ENV HOME /${USER}
+
+# サーバーを日本に変更
+# 多分早くなる
+RUN sed -i 's@archive.ubuntu.com@ftp.jaist.ac.jp/pub/Linux@g' /etc/apt/sources.list
+
+# #パッケージインストール
+RUN apt-get update \
+&&  apt-get install -y --no-install-recommends \
+                sudo \
+                git \
+                make \
+                cmake \
+                curl \
+                wget \
+                xz-utils \
+                #japanase
+                language-pack-ja-base \
+                language-pack-ja \
+                locales 
+
+# 日本語化
+RUN locale-gen ja_JP.UTF-8 
+ENV LANG ja_JP.UTF-8
+ENV LC_CTYPE ja_JP.UTF-8
+RUN localedef -f UTF-8 -i ja_JP ja_JP.utf8
+
+# USER
+RUN echo "root:root" | chpasswd && \
+    adduser --disabled-password --gecos "" "${USER}" && \
+    echo "${USER}:${USER}" | chpasswd && \
+    echo "%${USER}    ALL=(ALL)   NOPASSWD:    ALL" >> /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER} 
+
+# python 
+RUN python -m pip --no-cache-dir install --upgrade \
+    elasticsearch \
+    tensorflow-datasets
+
+
+# ディレクトリを指定
+USER ${USER}
+
+WORKDIR ${HOME}
