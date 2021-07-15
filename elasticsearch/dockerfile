@@ -7,4 +7,4 @@ RUN curl -Lo sudachi-dictionary-20201223-core.zip http://sudachi.s3-website-ap-n
     mv sudachi-dictionary-20201223/system_core.dic /usr/share/elasticsearch/config/sudachi/ && \
     rm -rf sudachi-dictionary-20201223-core.zip sudachi-dictionary-20201223/
 
-COPY sudachi.json  /usr/share/elasticsearch/config/sudachi/
+COPY sudachi.json /usr/share/elasticsearch/config/sudachi
