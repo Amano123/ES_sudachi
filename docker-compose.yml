@@ -18,6 +18,8 @@ services:
                 hard: -1
         ports:
             - 9200:9200
+        expose:
+            - 9300
         tty: true
 
     ubuntu:
@@ -33,3 +35,4 @@ services:
         image: docker.elastic.co/kibana/kibana:7.10.1
         ports:
             - 5601:5601
+
