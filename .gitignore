@@ -1,4 +1,3 @@
-backup
 ubuntu/dataset
 ubuntu/wikiextractor
 program_ubuntu/dataset/*
@@ -11,3 +10,7 @@ jsai
 jsai.zip
 wikiextractor
 jawiki-latest-pages-articles.xml.bz2
+.vscode-server
+.*
+ubuntu/source/tensorflow_datasets
+poli_dic
