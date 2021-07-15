@@ -40,7 +40,8 @@ RUN echo "root:root" | chpasswd && \
 # python 
 RUN python -m pip --no-cache-dir install --upgrade \
     elasticsearch \
-    tensorflow-datasets
+    tensorflow-datasets\
+    ipywidgets
 
 
 # ディレクトリを指定
