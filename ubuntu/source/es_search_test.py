@@ -23,6 +23,61 @@ import io
 terminology_list = io.open("./poli_dic/poli_terminology_list.txt").read().split("\n")
 len(terminology_list)
 
+def es_search_match_phrase_article(word: str, es) -> List:
+    query = {
+        "query": {
+            "match_phrase": {
+                "text": word
+            }
+        },
+        "_source" : ["article"]
+    }
+    result = es.search(size=10000, index=index, body=query)
+    
+    return list(set([i["_source"]["article"] for i in result["hits"]["hits"]]))
+# example
+物性  = es_search_match_phrase_article("物性", es)
+高分子  = es_search_match_phrase_article("高分子", es)
+重合体  = es_search_match_phrase_article("重合体", es)
+重合反応 = es_search_match_phrase_article("重合反応", es) 
+poli_pages =  list(set(物性 + 高分子 + 重合体 + 重合反応))
+
+cooking_page = es_search_match_phrase_article("料理", es)[:1000]
+len(set(poli_pages + cooking_page))
+
+#%%
+# articleで検索し、textを返す
+def es_search_match_article_text(article: str, es) -> List:
+    query = {
+        "query": {
+            "term": {
+                "article.keyword" : article
+            }
+        },
+        "sort" : [{"text_id":"asc"}]
+    }
+    result = es.search(size=100, index=index, body=query)
+    return [i["_source"]["text"] for i in result["hits"]["hits"]]
+
+result = es_search_match_article_text("アルミニウム", es)
+
+poli_text_list = []
+for page_article in poli_pages:
+    result = es_search_match_article_text(page_article, es)
+    poli_text_list += result
+with open("./poli_text.txt", mode="w") as f:
+    f.write("\n".join([i for i in poli_text_list if i != ""]))
+
+#%%
+cook_text_list = []
+for page_article in cooking_page:
+    result = es_search_match_article_text(page_article, es)
+    cook_text_list += result
+with open("./cook_text.txt", mode="w") as f:
+    f.write("\n".join([i for i in cook_text_list if i != ""]))
+
+
+
 #%%
 # 単語の完全一致数の数を数える関数
 def es_search_match_phrase_counter(word: str, es) -> int:
